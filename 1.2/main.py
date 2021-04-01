@@ -24,16 +24,7 @@ def Plot(g):
         yy = i
 
 def AutoCorr(g):
-    res = []
-    Rxxx = 0
-    Mx = Expectancy(g)
-    for T in range(tau):
-        for t in range(tau):
-           Rxxx = Rxxx + ((g[t] - Mx)* (g[t + T] - Mx))
-        res.append(Rxxx / (tau - 1))
-        Yrxx.append(T)
-        Rxxx = 0
-    return res
+    return MutualCorr(g, g)
 
 def MutualCorr(g, h):
     res = []

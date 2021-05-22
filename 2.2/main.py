@@ -53,17 +53,21 @@ def ParallelCompute(g, Fp):
     Fp.extend(Fourier(g))
 
 if __name__ == "__main__":
+    xfast = []
     x = []
+
     x1 = []
     x2 = []
     Fp1 = []
     Fp2 = []
     Plot(x)
+    Plot(xfast)
+
     for i in range(N):
         if(i % 2 == 1):
-            x2.append(x[i])
+            x2.append(xfast[i])
         else:
-            x1.append(x[i])
+            x1.append(xfast[i])
     p1 = Thread(target=ParallelCompute, args=(x1, Fp1))
     p2 = Thread(target=ParallelCompute, args=(x2, Fp2))
     p1.start()
@@ -71,6 +75,8 @@ if __name__ == "__main__":
     p1.join()
     p2.join()
     FastFp = FFT(Fp1, Fp2)
-    plt.stem(FastFp)
+    Fp = Fourier(x)
+
+    plt.stem([a - b for a, b in zip(FastFp, Fp)])
     plt.show()
 

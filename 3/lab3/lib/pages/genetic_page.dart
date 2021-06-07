@@ -39,6 +39,28 @@ class __GeneticPageState extends State<GeneticPage> {
     return Scaffold(body: getBody());
   }
 
+  Widget _buildPopupDialog(BuildContext context, int difference) {
+    return new AlertDialog(
+      title: const Text('Popup'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("${difference < 0 ? 'Так, варто' : 'Ні, не варто'}\nРізниця часу: ${difference.toString()}"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   Widget getBody() {
     return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
@@ -137,9 +159,15 @@ class __GeneticPageState extends State<GeneticPage> {
               var d = int.parse(dController.text);
               var y = int.parse(yController.text);
 
-              var startDate = DateTime.now().microsecondsSinceEpoch;
+              var startDate1 = DateTime.now().microsecondsSinceEpoch;
               var result = new Genetics().diophantineEquation(
                   equation: [a, b, c, d, y], populationSize: 10);
+              var time1 = DateTime.now().microsecondsSinceEpoch - startDate1;
+              var startDate2 = DateTime.now().microsecondsSinceEpoch;
+              var result2 = new Genetics().diophantineEquation(
+                  equation: [a, b, c, d, y], populationSize: 20);
+              var time2 = DateTime.now().microsecondsSinceEpoch - startDate2;
+
               print(result.length);
               if (result.length == 4) {
                 setState(() {
@@ -147,9 +175,13 @@ class __GeneticPageState extends State<GeneticPage> {
                   x2 = result[1].toDouble();
                   x3 = result[2].toDouble();
                   x4 = result[3].toDouble();
-                  time = DateTime.now().microsecondsSinceEpoch - startDate;
+                  time = time1;
                 });
               }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildPopupDialog(context, time2 - time1),
+              );
             },
             child: const Text('Submit'),
           ),

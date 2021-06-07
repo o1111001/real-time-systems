@@ -5,6 +5,8 @@ class FermatFactor {
   FermatFactor(this.n);
 
   calculate() {
+    final stopwatch = Stopwatch()..start();
+
     int foundIn = 1;
 
     if (n <= 0) {
@@ -35,7 +37,8 @@ class FermatFactor {
 
     return [
       [a - b, a + b],
-      foundIn
+      foundIn,
+      stopwatch.elapsed
     ];
   }
 }

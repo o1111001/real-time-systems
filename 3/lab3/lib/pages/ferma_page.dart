@@ -13,7 +13,6 @@ class FermaPage extends StatefulWidget {
 class __FermaPageState extends State<FermaPage> {
   int a;
   int b;
-
   final myController = TextEditingController();
 
   @override
@@ -26,6 +25,28 @@ class __FermaPageState extends State<FermaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: getBody());
+  }
+
+  Widget _buildPopupDialog(BuildContext context, Duration time) {
+    return new AlertDialog(
+      title: const Text('Popup'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("${time}"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
   }
 
   Widget getBody() {
@@ -61,7 +82,11 @@ class __FermaPageState extends State<FermaPage> {
                 onPressed: () {
                   var result = new FermatFactor(double.parse(myController.text))
                       .calculate();
-
+                  
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopupDialog(context, result[2]),
+                  );
                   setState(() {
                     a = result[0][0].toInt();
                     b = result[0][1].toInt();
